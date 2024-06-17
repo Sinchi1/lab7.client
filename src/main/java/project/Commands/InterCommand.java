@@ -13,5 +13,5 @@ public interface InterCommand {
 
     public String getName();
 
-    public Request execute(String args) throws IOException;
+    public Request execute(String args) throws IOException, ClassNotFoundException;
 }

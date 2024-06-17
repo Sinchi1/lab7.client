@@ -21,7 +21,7 @@ public abstract class AbstractCommand implements InterCommand {
         this.description = description;
     }
 
-    public Request buildCommand(String commandName, String args) throws IOException {
+    public Request buildCommand(String commandName, String args) throws IOException, ClassNotFoundException {
         AbstractCommand com = commandManager.getCommandByName(commandName);
         Request request = com.execute(args);
         return request;

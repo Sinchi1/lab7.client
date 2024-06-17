@@ -6,6 +6,7 @@ import project.Common.Request;
 import project.Common.Response;
 import project.Common.User;
 import project.Managers.ConsolePrinter;
+import project.Managers.ProgramController;
 import project.Managers.RequestSender;
 import project.Readers.MovieReader;
 
@@ -19,6 +20,8 @@ public class UpdateIdCommand extends AbstractCommand {
 
     MovieReader movieReader = new MovieReader();
 
+    ProgramController programController = new ProgramController();
+
 
 
     public UpdateIdCommand(String name, String description) {
@@ -31,20 +34,24 @@ public class UpdateIdCommand extends AbstractCommand {
      * @return void
      */
     @Override
-    public Request execute(String args){
+    public Request execute(String args) throws IOException, ClassNotFoundException {
         int id = Integer.parseInt(args);
-        
-        Movie mov1 = movieReader.readMovie();
-        mov1.setId(id);
-        return new Request(commname,mov1);
+        if (checkId(args)){
+            Movie mov1 = movieReader.readMovie();
+            mov1.setId(id);
+            return new Request(commname,mov1);
+        }
+        else {
+            ConsolePrinter.messageToConsole("Указанного id не существует!");
+            return null;
+        }
     }
 
 
     public boolean checkId(String args) throws IOException, ClassNotFoundException {
         int id = Integer.parseInt(args);
-        boolean flag = false;
-        RequestSender requestSender = new RequestSender(new User("localhost",1000));
+        RequestSender requestSender = new RequestSender(programController.getUser());
         Response response = requestSender.sendRequest(new Request("check_id",args));
-        return flag;
+        return response.getResponseBody().equals("true");
     }
 }
