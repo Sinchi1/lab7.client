@@ -1,15 +1,19 @@
 package project.Managers;
 
+import project.Common.Account;
 import project.Common.Request;
 import project.Common.Response;
 import project.Common.User;
 import project.Commands.AbstractCommand;
+import project.ProgrammEnums.OperationCode;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -21,16 +25,21 @@ public class ProgramController {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int SERVER_PORT = 1000;
 
+    Scanner scan = new Scanner(System.in);
+
+    private Account account = Account.getInstance();
+
     public ProgramController() {
         requestSender = new RequestSender(user);
     }
 
-    public void run() {
+    public void run() throws IOException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
         while(true) {
             while (true) {
                 try {
                     user.run();
+                    autihication();
                 } catch (IOException e) {
                     ConsolePrinter.messageToConsole("Сервер не запущен, для попытки переподключения нажмите Enter");
                     scanner.nextLine();
@@ -44,7 +53,6 @@ public class ProgramController {
             Thread thread = new Thread(() -> {
                 ConsolePrinter.messageToConsole("\nВыход из программы");
             });
-            Scanner scan = new Scanner(System.in);
             Runtime.getRuntime().addShutdownHook(thread);
             while (true) {
                 try {
@@ -119,6 +127,53 @@ public class ProgramController {
                     return;
                 }
             }
+        }
+    }
+
+    public void autihication(){
+        if (account.getUserName() == null || account.getPassword() == null)
+            System.out.println(account.getPassword() + account.getUserName());
+            ConsolePrinter.messageToConsole("Чтобы воспользоваться приложением нужно\n" +
+                "пройти процесс аутентификации ");
+        ArrayList<String> arguments = new ArrayList<>();
+        while(true){
+            ConsolePrinter.messageToConsole("Для регистрации или входа напишите reg/log соответственно");
+            String userInput = scan.nextLine();
+            String action;
+            if (userInput.equals("reg")){
+                action = "registration";
+            } else if (userInput.equals("log")){
+                action = "log";
+            } else {
+                continue;
+            }
+
+            ConsolePrinter.messageToConsole("Введите имя пользователя: ");
+            String userName = scan.nextLine().trim() ;
+            arguments.add(userName);
+            ConsolePrinter.messageToConsole("Введите пароль : ");
+            String password = scan.nextLine().trim() ;
+            arguments.add(password);
+
+            account.setUserName(userName);
+            account.setPassword(password);
+
+            Response response;
+            try {
+                response = requestSender.sendRequest(new Request(action, arguments));
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (response.getOperationCode().equals(OperationCode.ok)){
+                account.setUserName(arguments.get(0));
+                account.setPassword(arguments.get(1));
+                ConsolePrinter.messageToConsole(response.getResponseBody());
+                break;
+            } else {
+                ConsolePrinter.messageToConsole(response.getResponseBody());
+            }
+
         }
     }
 
