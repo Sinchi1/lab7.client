@@ -1,6 +1,7 @@
 package project.Readers;
 
 import project.Collections.*;
+import project.Common.Account;
 import project.Managers.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -211,17 +212,18 @@ public class MovieReader {
                         break;
                     }
                 } catch (InputMismatchException ignored) {
-                    ConsolePrinter.messageToConsole("Неправильный тип данных");
+                    ConsolePrinter.messageToConsole("Неправильный " +
+                            "тип данных");
                 }
 
             }
             Location location = new Location(x, y, z, name);
             operator = new Person(PersonName, height, col, hairCol, country, location);
-            return new Movie(id, filmname, cor, creationDate1, oscarCount, goldenPalmCount, length, genre, operator);
+            return new Movie(id, filmname, cor, creationDate1, oscarCount, goldenPalmCount, length, genre, operator, Account.getInstance().getUserName());
         } catch (NoSuchElementException e) {
             ConsolePrinter.messageToConsole("Введена запрещённая комбинация клавиш! Файл сохранится, а программа " +
                     "завершит свою работу!");
         }
-        return new Movie(id, filmname, cor, creationDate1, oscarCount, goldenPalmCount, length, genre, operator);
+        return new Movie(id, filmname, cor, creationDate1, oscarCount, goldenPalmCount, length, genre, operator, Account.getInstance().getUserName());
     }
 }

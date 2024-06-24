@@ -21,7 +21,7 @@ public class Movie implements Serializable {
     @JacksonXmlProperty(localName = "coordinates")
     private Coordinates coordinates; //Поле не может быть null@JacksonXmlProperty
     @JacksonXmlProperty(localName = "creationdate")
-    public ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    public java.time.ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     @JacksonXmlProperty(localName = "oscarcount")
     private Integer oscarsCount; //Значение поля должно быть больше 0, Поле не может быть null
     @JacksonXmlProperty(localName = "goldenpalmcount")
@@ -32,10 +32,13 @@ public class Movie implements Serializable {
     private MovieGenre genre; //Поле может быть null
     @JacksonXmlProperty(localName = "person")
     private Person operator; //Поле может быть null
+    @JacksonXmlProperty(localName = "userModification")
+    private String userModification; //Поле может быть null
+
 
 
     public Movie(Integer id, String name, Coordinates coordinates, ZonedDateTime creationDate, Integer oscarsCount,
-        long goldenPalmCount, long length, MovieGenre genre, Person operator) {
+                 long goldenPalmCount, long length, MovieGenre genre, Person operator, String userModification) {
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
@@ -45,6 +48,7 @@ public class Movie implements Serializable {
         this.length = length;
         this.genre = genre;
         this.operator = operator;
+        this.userModification = userModification;
     }
 
     public Movie(){}
@@ -65,7 +69,7 @@ public class Movie implements Serializable {
         return coordinates;
     }
 
-    public ZonedDateTime getCreationDate() {
+    public java.time.ZonedDateTime getCreationDate() {
         return creationDate;
     }
 
@@ -97,7 +101,7 @@ public class Movie implements Serializable {
         this.coordinates = coordinates;
     }
 
-    public void setCreationDate(ZonedDateTime creationDate) {
+    public void setCreationDate(java.time.ZonedDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -120,5 +124,24 @@ public class Movie implements Serializable {
     public void setOperator(Person operator) {
         this.operator = operator;
     }
+
+    @Override
+    public String toString() {
+        return "Первый элемент коллекции: "
+                + "Название Фильма:  "
+                + getName()
+                +"\nid Фильма:  " + getId()
+                + "\nКоордината X: " + getCoordinates().getX()
+                + "\n Координата Y: " + getCoordinates().getY()
+                + "\n Количество Оскаров: " + getOscarsCount()
+                + "\n Количество Золотых пальм: " + getGoldenPalmCount()
+                + "\n Длина фильма: " + getLength()
+                + "\n Жанр: " + getGenre().toString()
+                + "\n Страна: " + getOperator().getLocation().getName()
+                + "\n Имя режиссёра: " + getOperator().getName()
+                +"\nЦвет глаз режиссёра: " + getOperator().getEyeColor().toString()
+                + "\n Рост режиссёра: "+ getOperator().getHeight();
+    }
+
 }
 
