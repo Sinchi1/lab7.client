@@ -31,6 +31,7 @@ public class CommandManager implements Serializable {
         registerCommand("remove_any_by_oscars_count", new RemoveOscarCountCommand("remove_any_by_oscars_count", "удалить из коллекции один элемент, значение поля oscarsCount которого эквивалентно заданному"));
         registerCommand("update_id", new UpdateIdCommand("update_id", "обновить значение элемента коллекции, id которого равен заданному"));
         registerCommand("execute_script", new ExecuteScriptCommand("execute_script", "считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде в котором их вводит пользователь в интерактивном режиме."));
+        registerCommand("logout", new Logout("logout", "Выход из учётной записи"));
     }
 
     private static final LinkedHashMap<String, AbstractCommand> commandHashMap = new LinkedHashMap<>();
@@ -63,17 +64,6 @@ public class CommandManager implements Serializable {
         }
     }
 
-
-    public boolean insertNeededObject(String command){
-        switch (command){
-            case "add","update_id" ->{
-                return true;
-            }
-            default -> {
-                return false;
-            }
-        }
-    }
 
     public HashMap<String, AbstractCommand> getCommandHashMap(){
         return commandHashMap;
