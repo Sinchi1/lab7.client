@@ -156,6 +156,7 @@ public class ProgramController {
                     ConsolePrinter.messageToConsole("Введите пароль : ");
                     String password = scan.nextLine().trim();
                     arguments.add(password);
+                    arguments.add(action);
 
                     account.setUserName(userName);
                     account.setPassword(password);
@@ -175,8 +176,10 @@ public class ProgramController {
                     } else {
                         ConsolePrinter.messageToConsole(response.getResponseBody());
                     }
+                    arguments.clear();
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 ConsolePrinter.messageToConsole("Сервер был отключен.. Попытка переподключиться ");
                 while (true) {
                     try {
