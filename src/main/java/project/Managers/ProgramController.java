@@ -133,7 +133,6 @@ public class ProgramController {
     }
 
     public void autihication(){
-        System.out.println(account.getUserName() + account.getPassword());
         if (account.getUserName() == null || account.getPassword() == null){
             ConsolePrinter.messageToConsole("Чтобы воспользоваться приложением нужно\n" +
                 "пройти процесс аутентификации ");
