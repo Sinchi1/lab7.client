@@ -165,7 +165,21 @@ public class ProgramController {
                     try {
                         response = requestSender.sendRequest(new Request(action, arguments));
                     } catch (IOException | ClassNotFoundException e) {
-                        throw new RuntimeException(e);
+                        System.out.println("Кажется сервер был отключен, попытка переподключиться...");
+                        while (true) {
+                            try {
+                                user.run();
+                            } catch (IOException b) {
+                                ConsolePrinter.messageToConsole("Сервер не запущен, для попытки переподключения нажмите Enter \nДля отключения напишите exit");
+                                String answer = scanner.nextLine();
+                                if (answer.equalsIgnoreCase("exit")){
+                                    System.exit(1);
+                                }
+                                continue;
+                            }
+                            break;
+                        }
+                        continue;
                     }
 
                     if (response.getOperationCode().equals(OperationCode.ok)) {
@@ -179,7 +193,6 @@ public class ProgramController {
                     arguments.clear();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 ConsolePrinter.messageToConsole("Сервер был отключен.. Попытка переподключиться ");
                 while (true) {
                     try {
