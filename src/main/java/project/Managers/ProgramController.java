@@ -19,11 +19,11 @@ import java.util.Scanner;
 
 public class ProgramController {
     private final CommandManager commandManager = new CommandManager();
-    private final static User user = new User("localhost",1000); ;
+    private final static User user = new User("localhost",2032); ;
     private final RequestSender requestSender;
     private final ResponseHandler  responseHandler = new ResponseHandler();;
     private static final String SERVER_ADDRESS = "localhost";
-    private static final int SERVER_PORT = 1000;
+    private static final int SERVER_PORT = 2032;
 
     Scanner scan = new Scanner(System.in);
 

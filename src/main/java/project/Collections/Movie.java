@@ -93,6 +93,10 @@ public class Movie implements Serializable {
         return operator;
     }
 
+    public void setUserModification(String userModification){
+        this.userModification = userModification;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
