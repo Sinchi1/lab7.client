@@ -19,11 +19,11 @@ import java.util.Scanner;
 
 public class ProgramController {
     private final CommandManager commandManager = new CommandManager();
-    private final static User user = new User("localhost",1000); ;
+    private final static User user = new User("localhost",2032); ;
     private final RequestSender requestSender;
     private final ResponseHandler  responseHandler = new ResponseHandler();;
     private static final String SERVER_ADDRESS = "localhost";
-    private static final int SERVER_PORT = 1000;
+    private static final int SERVER_PORT = 2032;
 
     Scanner scan = new Scanner(System.in);
 
@@ -165,7 +165,21 @@ public class ProgramController {
                     try {
                         response = requestSender.sendRequest(new Request(action, arguments));
                     } catch (IOException | ClassNotFoundException e) {
-                        throw new RuntimeException(e);
+                        System.out.println("Кажется сервер был отключен, попытка переподключиться...");
+                        while (true) {
+                            try {
+                                user.run();
+                            } catch (IOException b) {
+                                ConsolePrinter.messageToConsole("Сервер не запущен, для попытки переподключения нажмите Enter \nДля отключения напишите exit");
+                                String answer = scanner.nextLine();
+                                if (answer.equalsIgnoreCase("exit")){
+                                    System.exit(1);
+                                }
+                                continue;
+                            }
+                            break;
+                        }
+                        continue;
                     }
 
                     if (response.getOperationCode().equals(OperationCode.ok)) {
@@ -179,7 +193,6 @@ public class ProgramController {
                     arguments.clear();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 ConsolePrinter.messageToConsole("Сервер был отключен.. Попытка переподключиться ");
                 while (true) {
                     try {

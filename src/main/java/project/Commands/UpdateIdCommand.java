@@ -42,14 +42,13 @@ public class UpdateIdCommand extends AbstractCommand {
             return new Request(commname,mov1);
         }
         else {
-            ConsolePrinter.messageToConsole("Указанного id не существует!");
+            ConsolePrinter.messageToConsole("Указанного id не существует или вы пытаетесь модифицировать чужой файл!");
             return null;
         }
     }
 
 
     public boolean checkId(String args) throws IOException, ClassNotFoundException {
-        int id = Integer.parseInt(args);
         RequestSender requestSender = new RequestSender(programController.getUser());
         Response response = requestSender.sendRequest(new Request("check_id",args));
         return response.getResponseBody().equals("true");
